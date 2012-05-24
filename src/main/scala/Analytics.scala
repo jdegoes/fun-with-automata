@@ -35,12 +35,8 @@ object Analytics {
   
   def select(n: Int): DT[Double, Vector[Double]] = {
     def recurse(acc: Vector[Double]): DT[Double, Vector[Double]] = {
-      if (acc.length < n) DT { v: Double =>
-        val nextAcc = acc :+ v
-        
-        (nextAcc, recurse(nextAcc))
-      } else DT { v: Double =>
-        val nextAcc = acc.drop(1)  :+ v
+      DT { v: Double =>
+        val nextAcc = (if (acc.length < n) acc else acc.drop(1))  :+ v
         
         (nextAcc, recurse(nextAcc))
       }
