@@ -87,4 +87,37 @@ object DT {
     
     self
   }
+  
+  def monoid[A](zero: A, append: (A, A) => A) = new DT[A, A] {
+    def ! (v: A) = {
+      def recurse(acc: A): DT[A, A] = new DT[A, A] {
+        def ! (v: A): (A, DT[A, A]) = {
+          val total = append(v, acc)
+          (total, recurse(total))
+        }
+      }
+    
+      recurse(zero) ! v
+    }
+  }
+  
+  def count[A] = {
+    def recurse(n: Int): DT[A, Int] = DT { v: A =>
+      (n, recurse(n + 1))
+    }
+    
+    recurse(1)
+  }
+  
+  def select[A](n: Int): DT[A, Vector[A]] = {
+    def recurse(acc: Vector[A]): DT[A, Vector[A]] = {
+      DT { v: A =>
+        val nextAcc = (if (acc.length < n) acc else acc.drop(1))  :+ v
+        
+        (nextAcc, recurse(nextAcc))
+      }
+    }
+    
+    recurse(Vector.empty)
+  }
 }
