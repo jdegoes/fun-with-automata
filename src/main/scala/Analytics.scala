@@ -29,7 +29,7 @@ object Analytics {
   
   val square = id.map(v => v * v)
   
-  val stdDev = (DT.rep3 >>> (id & id & id) >>> (count & sum & square)).map {
+  val stdDev = (DT.rep3[Double] >>> (count & sum & square)).map {
     case ((s0, s1), s2) => math.sqrt((s0 * s2 - s1 * s1) / (s0 * (s0 - 1.0)))
   }
   
