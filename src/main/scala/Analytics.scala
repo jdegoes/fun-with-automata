@@ -8,7 +8,7 @@ object Analytics {
   
   val square = identity[Double].map(v => v * v)
   
-  val stdDev = (rep3[Double] >>> (count & sum & square)) >>> merge3 { 
+  val stdDev = rep3[Double] >>> (count & sum & square) >>> merge3 { 
     case (s0, s1, s2) => math.sqrt((s0 * s2 - s1 * s1) / (s0 * (s0 - 1.0)))
   }
 }
